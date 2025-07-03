@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent Invoice - Courtland Realtors Ltd</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Times New Roman', serif;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #000;
+            background: white;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: white;
+            padding: 10mm;
+            display: flex;
+            flex-direction: column;
+            gap: 5mm;
+        }
+        
+        .invoice {
+            flex: 1;
+            border: 2px solid #000;
+            padding: 10px;
+            margin-bottom: 3mm;
+            page-break-inside: avoid;
+            max-height: 135mm;
+        }
+        
+        .invoice:last-child {
+            margin-bottom: 0;
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .company-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .invoice-title {
+            font-size: 12px;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        
+        .details-section {
+            margin-bottom: 10px;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            width: 130px;
+            flex-shrink: 0;
+        }
+        
+        .detail-input {
+            flex: 1;
+            border: none;
+            border-bottom: 1px solid #000;
+            padding: 2px 5px;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+        }
+        
+        .charges-section {
+            margin-bottom: 10px;
+        }
+        
+        .charges-title {
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 6px;
+            text-decoration: underline;
+        }
+        
+        .charges-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .charges-table th,
+        .charges-table td {
+            border: 1px solid #000;
+            padding: 4px 6px;
+            text-align: left;
+            font-size: 11px;
+        }
+        
+        .charges-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .charge-label {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .charge-input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: right;
+            font-family: inherit;
+            font-size: inherit;
+            padding: 2px;
+        }
+        
+        .total-row {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        
+        .total-row .charge-label {
+            font-size: 13px;
+        }
+        
+        .payment-section {
+            margin-bottom: 8px;
+        }
+        
+        .payment-title {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        
+        .footer {
+            border-top: 1px solid #000;
+            padding-top: 6px;
+            text-align: center;
+            font-size: 10px;
+        }
+        
+        .warning {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        
+        .contact {
+            font-style: italic;
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                margin: 0;
+            }
+            
+            .page {
+                margin: 0;
+                padding: 10mm;
+                width: 210mm;
+                min-height: 297mm;
+                box-shadow: none;
+            }
+            
+            .invoice {
+                page-break-inside: avoid;
+            }
+        }
+        
+        @page {
+            size: A4;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- First Invoice -->
+        <div class="invoice">
+            <div class="header">
+                <div class="company-name">COURTLAND REALTORS LTD</div>
+                <div class="invoice-title">Rent Invoice</div>
+            </div>
+            
+            <div class="details-section">
+                <div class="detail-row">
+                    <span class="detail-label">Date:</span>
+                    <input type="text" class="detail-input">
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">House Number:</span>
+                    <input type="text" class="detail-input">
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Apartment Name:</span>
+                    <input type="text" class="detail-input">
+                </div>
+            </div>
+            
+            <div class="charges-section">
+                <div class="charges-title">CHARGES</div>
+                <table class="charges-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60%;">DESCRIPTION</th>
+                            <th style="width: 40%;">AMOUNT (KSH)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="charge-label">RENT</td>
+                            <td><input type="text" class="charge-input" onchange="calculateTotal(1)"></td>
+                        </tr>
+                        <tr>
+                            <td class="charge-label">ARREARS</td>
+                            <td><input type="text" class="charge-input" onchange="calculateTotal(1)"></td>
+                        </tr>
+                        <tr>
+                            <td class="charge-label">WATER</td>
+                            <td><input type="text" class="charge-input" onchange="calculateTotal(1)"></td>
+                        </tr>
+                        <tr>
+                            <td class="charge-label">INTERNET</td>
+                            <td><input type="text" class="charge-input" onchange="calculateTotal(1)"></td>
+                        </tr>
+                        <tr>
+                            <td class="charge-label">GARBAGE</td>
+                            <td><input type="text" class="charge-input" onchange="calculateTotal(1)"></td>
+                        </tr>
+                        <tr class="total-row">
+                            <td class="charge-label">TOTAL</td>
+                            <td><input type="text" class="charge-input" readonly id="total1"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="payment-section">
+                <div class="detail-row">
+                    <span class="detail-label">Payable Deadline:</span>
+                    <input type="text" class="detail-input">
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Payment Details:</span>
+                    <input type="text" class="detail-input">
+                </div>
+            </div>
+            
+            <div class="footer">
+                <div class="warning">Please ensure payment is made by the 5th of the month to avoid the 10% penalty.</div>
+                <div class="contact">For inquiries, contact +254703759351/+254723575686</div>
+            </div>
+        </div>
+        
+        <!-- Second Invoice (Identical) -->
+        <div class="invoice">
+            <div class="header">
+                <div class="company-name">COURTLAND REALTORS LTD</div>
+                <div class="invoice-title">Rent Invoice</div>
+            </div>
+            
+            <div class="details-section">
+                <div class="detail-row">
+                    <span class="detail-label">Date:</span>
+                    <input type="text" class="detail-input">
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">House Number:</span>
+                    <input type="text" class="detail-input">
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Apartment Name:</span>
+                    <input type="text" class="detail-input">
+                </div>
+            </div>
+            
+            <div class="charges-section">
+                <div class="charges-title">CHARGES</div>
+                <table class="charges-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60%;">DESCRIPTION</th>
+                            <th style="width: 40%;">AMOUNT (KSH)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="charge-label">RENT</td>
+                            <td><input type="text" class="charge-input" onchange="calculateTotal(2)"></td>
+                        </tr>
+                        <tr>
+                            <td class="charge-label">ARREARS</td>
+                            <td><input type="text" class="charge-input" onchange="calculateTotal(2)"></td>
+                        </tr>
+                        <tr>
+                            <td class="charge-label">WATER</td>
+                            <td><input type="text" class="charge-input" onchange="calculateTotal(2)"></td>
+                        </tr>
+                        <tr>
+                            <td class="charge-label">INTERNET</td>
+                            <td><input type="text" class="charge-input" onchange="calculateTotal(2)"></td>
+                        </tr>
+                        <tr>
+                            <td class="charge-label">GARBAGE</td>
+                            <td><input type="text" class="charge-input" onchange="calculateTotal(2)"></td>
+                        </tr>
+                        <tr class="total-row">
+                            <td class="charge-label">TOTAL</td>
+                            <td><input type="text" class="charge-input" readonly id="total2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="payment-section">
+                <div class="detail-row">
+                    <span class="detail-label">Payable Deadline:</span>
+                    <input type="text" class="detail-input">
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Payment Details:</span>
+                    <input type="text" class="detail-input">
+                </div>
+            </div>
+            
+            <div class="footer">
+                <div class="warning">Please ensure payment is made by the 5th of the month to avoid the 10% penalty.</div>
+                <div class="contact">For inquiries, contact +254703759351/+254723575686</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateTotal(invoiceNumber) {
+            const invoice = document.querySelectorAll('.invoice')[invoiceNumber - 1];
+            const inputs = invoice.querySelectorAll('.charge-input:not([readonly])');
+            const totalInput = invoice.querySelector('#total' + invoiceNumber);
+            
+            let total = 0;
+            inputs.forEach(input => {
+                const value = parseFloat(input.value) || 0;
+                total += value;
+            });
+            
+            totalInput.value = total.toFixed(2);
+        }
+    </script>
+</body>
+</html>
